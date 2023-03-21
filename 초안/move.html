@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            text-align: center;
+        }
+        canvas{
+            background-image: url("./img/street.png");
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body  onkeydown="keydown()" onkeyup="keyup()">
+    <canvas width="1200" height="800"></canvas>
+    <script>
+
+        
+        let canvas = document.querySelector("canvas");
+        let ctx = canvas.getContext("2d");
+
+        //플레이어 이동 방향과 속도
+        let dx = 0;
+        let dy = 0;
+
+        //키 이벤트로 인해 인식된 keycode변수
+        let keycode;
+
+        //변수 정의
+        let left = false;
+        let right = false;
+        let up = false;
+        let down = false;
+
+        //내 캐릭터 이미지 객체 생성
+        let imgChar = new Image();
+        imgChar.src = "./img/waddle-kirby.gif"
+
+        let imgCar = new Image();
+        imgCar.src = "./img/car2.png"
+
+
+        // 플레이어 캐릭터의 중심좌표
+        let char = {
+            x : 100,
+            y : 400,
+            w : 80,
+            h : 80
+        }
+
+        function loaded() {
+            runGame();
+            setInterval(runGame, 5);
+        }
+        loaded()
+        function runGame(){
+            moveAll();
+            drawAll();
+        }
+
+        function moveAll(){
+            //플레이어 좌표
+            char.x += dx;
+            char.y += dy;
+        }
+
+        
+
+        function drawAll(){
+            ctx.clearRect(0,0,canvas.width, canvas.height)
+            ctx.drawImage(imgChar,char.x-char.w, char.y-char.h, char.w, char.h)
+            //키 코드값 글씨 그리기
+            ctx.fillStyle = "white";
+            ctx.font = "30px sans-serif";
+            ctx.fillText(`${keycode}key code`, 10, 40); 
+        }
+
+        class Car{
+            constructor(x, y, width, height) {
+                this.x = x;
+                this.y = y;
+                this.width = width;
+                this.height = height;
+                this.draw()
+            }
+            draw(){
+                imgCar.addEventListener("load", function(){
+                    console.log(1111111)
+                    ctx.drawImage(imgCar, this.x, this.y, this.width, this.height)
+                }.bind(this))
+                
+            }
+        }
+        new Car(50, 50, 50, 50)
+
+
+        
+
+        function keydown() {
+            //눌러진 key의 코드값
+            keycode = event.keyCode;
+            console.log(keycode)
+            switch(keycode){
+                case 65: 
+                    dx = -1; 
+                    break; //left
+                case 87: 
+                    dy = -1; 
+                    break; //up
+                case 68: 
+                    dx = 1; 
+                    break; //right
+                case 83: 
+                    dy = 1; 
+                    break; //down
+            }
+        }
+
+        function keyup(){
+            //떨어진 key코드값
+            keycode=event.keyCode;
+            console.log(keycode)
+            switch(keycode) {
+                case 65:
+                case 68: dx=0; break;
+                case 87:
+                case 83: dy=0; break;
+            }
+        }
+
+        /* let y = 0;
+        function moveRect(){
+            if(y > canvas.height) {
+                y=0
+            } 
+            y++;
+            ctx.clearRect(0,0,canvas.width, canvas.height);// 없으면 0부터 쭉~~~~ 길어짐
+            ctx.drawImage(imgCar,posi.x-posi.w, posi.y-posi.h, posi.w*5, posi.h*5)
+            requestAnimationFrame(moveRect);  //60hz사용하는 모니터는 초당 60frame호출 
+        } */
+
+        
+
+
+
+        let boxes =[];
+        // 글자 두께 크기 서체 지정
+        ctx.font = "bold 24px sans-serif";
+
+        class Box {
+            constructor() {
+                
+                this.x = 100;
+                this.y = 100;
+                this.width = 500;
+                this.height = 500;
+                this.draw();
+            }
+            draw() {
+                
+            }
+        }
+        
+      
+        
+        
+        
+
+        
+    </script>
+</body>
+</html>

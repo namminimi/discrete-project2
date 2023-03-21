@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        header {
+            background-color:  rgb(115, 99, 87);
+            margin-bottom: 50px;
+        }
+
+        #homeLog {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            height: 50px;
+            align-items: center;
+            padding: 15px;
+            font-size: 15px;
+        }
+        #home {
+            width: 15%;
+        }
+
+        #home ul {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #home ul li a{
+            color: #fff
+        }
+
+        #login {
+            width: 50%;
+        }
+
+        #login ul {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #login ul a{
+            color: #fff
+        }
+
+        section {
+            width: 100%;
+            
+        }
+        #logoSer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-top: 30px;
+        }
+
+        #logoSer h1 {
+            font-size: 30px;
+            color: rgb(27, 235, 27);
+        }
+
+        #logoSer img {
+            width: 20%;
+        }
+        #search span {
+            border: 3px solid lightblue;
+            padding: 15px 0 15px 20px;
+        }
+
+        #search span select {
+            border: none;
+            outline: 0;
+        }
+
+        #search span input {
+            border: none;
+            margin-right: 100px;
+            outline: 0;
+            height: 40px;
+        }
+
+        #search span i {
+            background-color: lightblue;
+            padding: 15px 22px 15px 22px;
+        }
+        #subHeaders {
+            margin-top: 30px;
+            border-top: 1px solid #444;
+            border-bottom: 1px solid #444;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        #subHeader {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        #subHeader ul {
+            font-size: 15px;
+        }
+
+        #subHeader ul:nth-child(1) {
+            display: flex;
+            justify-content: flex-start;
+            width: 32%;
+            border-right: 1px solid #888;
+            padding-right: 5px;
+        }
+
+        #subHeader ul:nth-child(1) li a {
+            color: blue
+        }
+
+        #subHeader ul:nth-child(1) li {
+            font-weight: bold;
+        }
+
+        #subHeader ul:nth-child(1) li:not(:last-child){
+            margin-right: 15px;
+        }
+        #subHeader ul:nth-child(2) {
+            display: flex;
+            justify-content: flex-start;
+            width: 20%;   
+        }
+
+        #subHeader ul:nth-child(2) li {
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        #subHeader ul:nth-child(2) li a{
+            color: black
+        }
+
+        #subHeader ul:nth-child(3) {
+            display: flex;
+            justify-content: flex-end;
+            width: 45%;
+        }
+
+        #subHeader ul:nth-child(3) li {
+            margin-right: 15px;
+        }
+
+        #subHeader ul:nth-child(3) li a{
+            color: black;
+        }
+
+        #bg {
+            background-color: rgb(233, 229, 225);
+            padding-top : 30px;
+            padding-bottom: 30px; 
+            position: relative;
+        }
+
+        #mainImg {
+            background-image: url("./img/main_img2.gif");
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-size: 0;
+            height: 400px;
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        #bookLists {
+            background-color: #fff;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 60px;
+            position: relative;
+        }
+        #bookLists #nowBook {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        #bookLists #bookList {
+            display: flex;
+            justify-content: space-around; 
+        }
+        #bookList .webtoon {
+            padding: 30px
+        }
+        #bookList .pic1 a img {
+            width: 214px;
+            height: 208px;
+        }
+        #bookList .pic2 a img {
+            width: 214px;
+            height: 208px;
+        }
+        #bookList .pic3 a img {
+            width: 214px;
+            height: 208px;
+        }
+        #bookList .pic4 a img {
+            width: 214px;
+            height: 208px;
+        }
+        #bookList .webtoon .text {
+            width: 214px;
+            height: 110px;
+            padding-top: 15px;
+        }
+        #bookList .text p:nth-child(1) {
+            margin-bottom: 5px;
+        }
+
+        #bookList .text a {
+            color: blue
+        }
+        #bookList .text p {
+            font-size: 15px;
+        }
+
+        #bookList .text h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        #mainImg #arrow {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        #bookLists #arrow2 {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <header>
+            <div id="homeLog">
+                <div id="home">
+                    <ul>
+                        <li>
+                            <a href="#">홈</a>
+                        </li>
+                        <li>
+                            <a href="#">도서</a>
+                        </li>
+                        <li>
+                            <a href="#">티켓</a>
+                        </li>
+                        <li>
+                            <a href="#">투어</a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="login">
+                    <ul>
+                        <li>
+                            <a href="#">로그인</a>
+                        </li>
+                        <li>
+                            <a href="#">회원가입</a>
+                        </li>
+                        <li>
+                            <a href="#">장바구니</a>
+                        </li>
+                        <li>
+                            <a href="#">마이페이지</a>
+                        </li>
+                        <li>
+                            <a href="#">고객센터</a>
+                        </li>
+                        <li>
+                            <a href="#">판매자매니저</a>
+                        </li>
+                        <li>
+                            <a href="#">Language</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <section>
+            <div id="logoSer">
+                <h1>
+                    GreenBooks
+                </h1>
+                <div id="search">
+                    <span>
+                        <select name="ser" id="ser">
+                            <option value="통합검색">통합검색</option>
+                            <option value="통합검색할래?">통합검색할래?</option>
+                            <option value="통합검색못함">통합검색못함</option>
+                            <option value="통합검색없음">통합검색없음</option>
+                        </select>
+                        <input type="text" placeholder="독서는 내년부터 시작하자">
+                        <i>아이콘</i>
+                    </span>
+                </div>
+                <img src="./img/ad.gif" alt="광고">
+            </div>
+            <div id="subHeaders">
+                <div id="subHeader">
+                    <ul>
+                        <li>
+                            <a href="#">베스트</a>
+                        </li>
+                        <li>
+                            <a href="#">신상품</a>
+                        </li>
+                        <li>
+                            <a href="#">이벤트</a>
+                        </li>
+                        <li>
+                            <a href="#">바이백</a>
+                        </li>
+                        <li>
+                            <a href="#">매장안내</a>
+                        </li>
+                        <li>
+                            <a href="#">북클럽</a>
+                        </li>
+                    </ul>    
+                    <ul>    
+                        <li>
+                            <a href="#">채널그린</a>
+                        </li>
+                        <li>
+                            <a href="#">블로그</a>
+                        </li>
+                        <li>
+                            <a href="#">그린펀딩</a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <a href="#">이달의 사은품</a>
+                        </li>
+                        <li>
+                            <a href="#">만원이하도서</a>
+                        </li>
+                        <li>
+                            <a href="#">추천도서</a>
+                        </li>
+                        <li>
+                            <a href="#">기획코너</a>
+                        </li>
+                        <li>
+                            <a href="#">대량/법인</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="bg">
+                <div id="mainImg">
+                    이미지
+                    <div id="arrow">
+                        <img src="./img/arrow11.gif" alt="">
+                        <img src="./img/arrow12.gif" alt="">
+                    </div>
+                </div>
+                <div id="bookLists">
+                    <p id="nowBook">지금, 이 책 ></p>
+                    <div id="bookList">
+                        <div class="webtoon pic1">
+                            <a href="#"><img src="./img/book5.gif" alt="귀멸의 칼날 시즌1"></a>
+                            <div class="text text1">
+                                <p>불꽃튀는 사랑 싸움</p>
+                                <a href="#"><h3>귀멸의 칼날 시즌1</h3></a>
+                                <p>내용 모름 스포금지</p>
+                                <h3>100,000원</h3>
+                            </div>
+                        </div>
+                        <div class="webtoon pic2">
+                            <a href="#"><img src="./img/book6.gif" alt="귀멸의 칼날 시즌2"></a>
+                            <div class="text text2">
+                                <p>남주 동료들과 한컷</p>
+                                <a href="#"><h3>귀멸의 칼날 시즌2</h3></a>
+                                <p>내용 모름 스포금지</p>
+                                <h3>120,000원</h3>
+                            </div>
+                        </div>
+                        <div class="webtoon pic3">
+                            <a href="#"><img src="./img/book7.gif" alt="귀멸의 칼날 시즌3"></a>
+                            <div class="text text3">
+                                <p>남주의 적</p>
+                                <a href="#"><h3>귀멸의 칼날 시즌3</h3></a>
+                                <p>내용 모름 스포금지</p>
+                                <h3>130,000원</h3>
+                            </div>
+                        </div>
+                        <div class="webtoon pic4">
+                            <a href="#"><img src="./img/book8.gif" alt="귀멸의 칼날 시즌4"></a>
+                            <div class="text text4">
+                                <p>남주 각성하다</p>
+                                <a href="#"><h3>귀멸의 칼날 시즌4</h3></a>
+                                <p>내용 모름 스포금지</p>
+                                <h3>105,000원</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="arrow2">
+                        <img src="./img/arrow11.gif" alt="">
+                        <img src="./img/arrow12.gif" alt="">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer></footer>
+    </div>
+</body>
+</html>

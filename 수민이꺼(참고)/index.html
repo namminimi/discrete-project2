@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      width: 100%;
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+    canvas{background-color: #ccc;}
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <canvas></canvas>
+    <div id="hp"></div>
+    <div id="hp2"></div>
+  </div>
+  <script>
+    const canvas= document.querySelector("canvas");
+    const ctx= canvas.getContext("2d");
+    canvas.width= window.innerWidth-100;
+    canvas.height= window.innerHeight-100;
+    let rightKeyActive= false;
+    let leftKeyActive= false;
+    let zKeyActive= false;
+
+    let animation;
+    let animation2;
+
+    let timer=0;
+    let state={
+      //speed
+      walk: 7,
+      // jump
+      jump: 7,
+      jumpHight: 700,
+      jumpTime: 30, //최고지점에 달성하기 전에 Time이 완료되어야하므로 time의 증가폭*30이상
+    }
+
+    let bg={
+      draw(){
+        ctx.fillStyle="rgba(0,0,0,.1)";
+        ctx.fillRect(0,0,canvas.width,80) //탑
+        ctx.fillRect(0,800,canvas.width,80); //언더
+      }
+    }
+
+    let monster={
+      x: (canvas.width-500)/2,
+      y: 300,
+      width: 200,
+      height: 200,
+      draw(){
+        ctx.fillRect(this.x,this.y,this.width,this.height);  
+      },
+      // speed
+      speed: 7,
+      // attack
+      attackVolume: 6, // 산탄갯수
+      hp: 500,
+    }
+
+    let user={
+      x: 100,
+      y: 700,
+      width: 100,
+      height: 100,
+      draw(){
+        bg.draw();
+        monster.draw();
+        ctx.fillStyle="rgba(0,0,0,.1)";
+        ctx.fillRect(this.x,this.y,this.width,this.height);
+      },
+      hp: 400,
+      attackPower: 6,
+      attackDistance: 100,
+    }
+    user.draw()
+
+/************************선언********************************/
+
+let arr=[];
+class Box{
+  constructor(index,x,y){
+    this.index= index,
+    this.x= x,
+    this.y= y,
+    this.draw()
+  }
+  draw(){
+    ctx.fillRect(this.x, this.y, 30, 100) //위에서 아래로 떨어지는
+  }
+}
+
+let tempX;
+
+
+for (let i = 0; i < monster.attackVolume; i++) {
+  tempX= Math.floor(Math.random()*canvas.width)
+  arr.push(new Box(i,tempX,0))
+  setInterval(
+    function(){
+    arr[i].x=Math.floor(Math.random()*canvas.width)
+    },2068)
+}
+
+
+function boxMove(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  arr.forEach(box=>{
+    box.y+= monster.speed;
+    if(box.y > canvas.height){
+      box.y= 0;
+      tempX= Math.floor(Math.random()*canvas.width)
+    }
+    box.draw()
+    user.draw()
+
+      if(box.x <= user.x+user.width 
+      && box.x+30 > user.x
+      && box.y <= user.y+user.height
+      && box.y+100 > user.y
+      ){
+        user.hp--;
+        hpLog.innerHTML= user.hp;
+      }
+
+  })
+  requestAnimationFrame(boxMove)
+}
+
+
+
+/**********************monsterAttack*************************/
+
+    function keySubmit(){
+      window.addEventListener("keydown",function(e){
+        if(e.code=="ArrowRight"){rightKeyActive= true;}
+        if(e.code=="ArrowLeft"){leftKeyActive= true;}
+        if(e.code=="KeyZ"){zKeyActive= true;}
+      })
+     
+      window.addEventListener("keyup",function(e){
+        if(e.code=="ArrowRight"){rightKeyActive= false;}
+        if(e.code=="ArrowLeft"){leftKeyActive= false;}
+      })
+
+        if(zKeyActive){
+          user.y= Math.max(0, user.y-state.jump);
+          timer++;
+          ctx.clearRect(0,0,canvas.width, canvas.height);
+          user.draw()
+        }else{
+          if(user.y<=state.jumpHight){
+            user.y= user.y+state.jump;
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            user.draw()
+          };
+        }
+        if(timer>=state.jumpTime){
+          zKeyActive=false;
+          timer=0;
+        }
+
+        if(rightKeyActive){
+          user.x= Math.min(user.x+state.walk, canvas.width-user.width);
+          ctx.clearRect(0,0,canvas.width, canvas.height);
+          user.draw()
+        }
+        if(leftKeyActive){
+          user.x= Math.max(user.x-state.walk, 0);
+          ctx.clearRect(0,0,canvas.width, canvas.height);
+          user.draw()
+        }
+
+      animation= requestAnimationFrame(keySubmit)
+    }
+/*************************move****************************/
+const hpLog= document.querySelector("#hp")
+const hpLog2= document.querySelector("#hp2")
+setInterval(function (){
+  if(monster.x <= user.x+user.width 
+  && monster.x+monster.width > user.x
+  && monster.y <= user.y+user.height
+  && monster.y+monster.height > user.y
+  ){
+    user.hp--;
+    user.hp= user.hp<0? 0 : user.hp;
+    hpLog.innerHTML= user.hp;
+  }
+},200)
+
+
+
+
+/**********************userAttack*************************/
+
+window.addEventListener("keydown",function(e){
+  if(e.code=="KeyX"){
+      if(monster.x <= user.x+user.width+user.attackDistance
+      && monster.x+monster.width > user.x-user.attackDistance
+      && monster.y <= user.y+user.height+user.attackDistance
+      && monster.y+monster.height > user.y-user.attackDistance
+      ){
+        monster.hp-= user.attackPower;
+        monster.hp= monster.hp<0? 0 : monster.hp;
+        hpLog2.innerHTML= monster.hp;
+      }
+  }
+})
+
+/*********************** Move&Jump **************************/
+    keySubmit()
+    boxMove()
+
+/***************************실행*****************************/
+  </script>
+</body>
+</html>

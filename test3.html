@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas{
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="1000" height="800"></canvas>
+    <script>
+        const canvas = document.querySelector("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth-200;
+        canvas.height = window.innerHeight-200;
+
+        let animation;
+        let timer = 0;
+        let jump = false;
+        let jumptimer = 0;
+
+        let gameU = {
+            x: 30,
+            y: 300,
+            width: 50,
+            height: 50,
+            draw(){
+                ctx.fillStyle = "green"
+                ctx.fillRect(this.x, this.y, this.width, this.height)
+            }
+        } 
+        gameU.draw();
+
+        let obstacleArr = [];
+
+        class Obstacle {
+            constructor(){
+                this.x = 900;
+                this.y = 300;
+                this.width = 50;
+                this.height = 50;
+            }
+            draw() {
+                ctx.fillStyle = "red"
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+            }
+        }
+        function startFrame() {
+            timer++;
+            
+            ctx.clearRect(0,0,canvas.width, canvas.height)
+            animation = requestAnimationFrame(startFrame)
+
+            if(timer % 180 == 0) {
+                let obs = new Obstacle()
+                obstacleArr.push(obs)
+            }
+            obstacleArr.forEach((item, index, arr)=>{
+                if(item.x < -25) {
+                    arr.splice(index, 1)
+                }
+                item.x--;
+                item.draw()
+            })
+            gameU.draw()
+        }
+        startFrame();
+    </script>
+</body>
+</html>

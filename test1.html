@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            text-align: center;
+        }
+        canvas{
+            background-image: url("./img/street.png");
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body onload="startGame()">
+    <canvas width="1200" height="800"></canvas>
+    <script>
+        let canvas = document.querySelector("canvas");
+        let ctx = canvas.getContext("2d");
+
+        //플레이어 이동 방향과 속도
+        let dx = 0;
+        let dy = 0;
+
+        //키 이벤트로 인해 인식된 keycode변수
+        let keycode;
+
+        //canvas.width = window.innerWidth-200;
+        //canvas.height = window.innerinnerHeight-200;
+        //내 캐릭터 이미지 객체 생성
+        let imgChar = new Image();
+        imgChar.src = "./img/waddle-kirby.gif"
+
+        let imgCar = new Image();
+        imgCar.src = "./img/Artboard 1.png"
+
+        function startGame(){
+            my_char.draw()
+        }
+
+        //캐릭터 객체
+        let my_char = {
+            x: 60,
+            y: 350,
+            w: 80,
+            h: 80,
+            draw() {
+                //ctx.clearRect(0,0,canvas.width, canvas.height)
+                imgChar.addEventListener("load", function(){
+                ctx.drawImage(imgChar,my_char.x , my_char.y, my_char.w, my_char.h);
+                    //키 코드값 글씨 그리기
+                ctx.fillStyle = "white";
+                ctx.font = "30px sans-serif";
+                ctx.fillText(`${keycode}key code`, 10, 40);
+                })
+            }
+        }
+        
+    </script>
+</body>
+</html>

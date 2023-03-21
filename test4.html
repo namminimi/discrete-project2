@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        canvas{
+            background-image: url("./img/street.png");
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body onkeydown="keydown()" onkeyup="keyup()">
+    <canvas width="1200" height="800"></canvas>
+    <script>
+        const canvas = document.querySelector("canvas");
+        const ctx = canvas.getContext("2d");
+        //캐릭터, 자동차 배치
+        //캐릭터 조작
+        //자동차 자동 이동
+
+        
+
+        //변수 정의
+        let animation;
+        let timer = 0;
+        let right = true;
+        
+        //플레이어 이동 방향과 속도
+        let dx = 0;
+        let dy = 0;
+
+        //키 이벤트로 인해 인식된 keycode변수
+        let keycode;
+
+        //내캐릭터 이미지 객체 생성
+        let imgElem = new Image();
+        imgElem.src = "./img/waddle-kirby.gif"
+        let car = new Image();
+        car.src = "./img/car1.png"
+
+        let my_char = {
+            x: 80,
+            y: 350,
+            w: 50,
+            h: 50,
+            draw(){
+                ctx.fillStyle = "green";
+                ctx.fillRect(this.x, this.y, this.w, this.h);
+                //이미지 생성일때 bind안할시 this가 객체를 바라보지 않음
+            },
+            moveAll() {
+                this.x += dx
+                this.y += dy
+            }
+        }
+
+
+        let my_char2 = {
+            x: 480,
+            y: 0,
+            w: 50,
+            h: 50,
+            draw(){
+                ctx.fillStyle = "blue";
+                ctx.fillRect(this.x, this.y, this.w, this.h);
+                //이미지 생성일때 bind안할시 this가 객체를 바라보지 않음
+            },
+            moveAll() {
+                this.x += dx
+                this.y += dy
+            }
+        }
+
+
+        //캐릭터 컨트롤
+        function loaded(){
+            runGame()
+            setInterval(runGame, 10)
+        }
+        loaded()
+        function runGame(){
+            my_char.draw();
+            my_char.moveAll();
+            //console.log()
+        }
+        my_char.draw()
+        my_char2.draw()
+        //장애물(차) 배열
+        let cars = [];
+
+        class New_car {
+            constructor(index,x, speed){
+                this.index = index
+                this.x = x;
+                this.y = -50;
+                this.speed = speed;
+                this.width = 50;
+                this.height = 50;
+            }
+            draw() {
+                ctx.fillStyle = "red";
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                //이미지 생성일때 bind안할시 this가 객체를 바라보지 않음
+                //박스에 인덱스 번호 생성
+                //ctx.fillText(this.index, this.x+40, this.y+40);
+            }
+        }
+
+        // box 객체 생성해서 배열로 넣기
+        let tempX, tempSpeed, ncar;
+        let street_num = [180, 275, 380, 480]
+        for(let i = 0; i< 20; i++) {
+            //speed는 랜덤 1~ 5으로 지정
+            //y값은 0으로 고정
+            //x 값은 각 도로 위치에  4개 랜덤 배치
+            tempSpeed = Math.floor(Math.random() * 4) + 1  //1~5
+            tempX = Math.floor(Math.random() * 4)
+            console.log(tempX) 
+            ncar = new New_car(i,street_num[tempX], tempSpeed)
+            cars.push(ncar)
+            
+        }
+        //장애물 생성 함수
+        function startFrame() {
+            timer++;
+            //캔버스 지우기
+            //console.log(timer)
+            ctx.clearRect(0,0,canvas.width, canvas.height)
+            animation = requestAnimationFrame(startFrame)
+  
+            cars.forEach((item,index,arr)=>{
+                item.y += item.speed;
+
+                if(item.y == 800) {
+                    arr.splice(index, 1)
+                }
+                if (timer % 180 == 0){
+
+                }
+                
+                if (item.y > canvas.height) {
+                    item.y = -item.y
+                }
+                item.y++;
+                console.log(item.y)
+                item.draw()
+                //충돌 확인
+                crashCheck(my_char, item);
+            }) 
+            
+            
+            my_char.draw()
+            my_char2.draw()
+        }
+        startFrame()
+//////////////////////////////////////////////////////
+        function speedRun() {
+            let {lists} = cars;
+            console.log(cars)
+            console.log(cars[0])
+        }
+        speedRun()
+        //////////////////////////////////////
+        //충돌 확인
+        function crashCheck(user, bot) {
+            let x = bot.x - user.x
+            let y = bot.y - user.y; //0 - (350 + 50/2) -375
+            let xy = x * x + y* y
+            //console.log(x, y, xy)
+            if(x <= 50 && x >= -100 && xy <= 2500 && xy >= 0 ) {
+                console.log("충돌")
+                cancelAnimationFrame(animation)
+            }
+        }
+        //체크용
+        canvas.addEventListener("click",(e)=>{
+            let mouseX = e.layerX
+            let mouseY = e.layerY;
+            console.log(mouseX, mouseY)
+        })
+        //키 이벤트 
+        function keydown() {
+            //눌러진 key의 코드값
+            keycode = event.keyCode;
+            console.log(keycode)
+            switch(keycode){
+                case 65: 
+                    dx = -1; 
+                    break; //left
+                case 87: 
+                    dy = -1; 
+                    break; //up
+                case 68: 
+                    dx = 1; 
+                    break; //right
+                case 83: 
+                    dy = 1; 
+                    break; //down
+            }
+        }
+
+        function keyup(){
+            //떨어진 key코드값
+            keycode=event.keyCode;
+            console.log(keycode)
+            switch(keycode) {
+                case 65:
+                case 68: dx=0; break;
+                case 87:
+                case 83: dy=0; break;
+            }
+        }
+    </script>
+</body>
+</html>

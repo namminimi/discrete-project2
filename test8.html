@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .section01{position:relative; height:500px; background-color:#404e7f; }
+        .section01 canvas { display: block; position: absolute; top: 0; left:50%; margin-left:-500px; width:1000px; height:500px; z-index: 1; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <div class="section01">
+        <canvas id="snow_canvas"></canvas>
+    </div>
+    <script>
+        //눈 내리기
+        window.onload = function(){
+
+        const canvas = document.getElementById("snow_canvas");
+        const ctx = canvas.getContext("2d");
+
+        let W = 1000; //영역 넓이
+        let H = 500; //영역 높이
+        canvas.width = W; //canvas 폭값 할당
+        canvas.height = H; //canvas 높이값 할당
+
+        let mp = 100; //밀도 수치 /눈 배열 / 눈 내리는 양 (수가 적을수록 조금씩 위에서 아래로 떨어짐)
+        let particles = [];
+        //인덱스 100개 랜덤값으로 눈 x값위치, y값위치, 눈 크기
+        for(let i = 0; i < mp; i++) {
+            particles.push({
+                x: Math.random()*W, 
+                y: Math.random()*H, 
+                r: Math.random()*4+3, //입자 크기 최대치 조절
+                d: Math.random()*mp //밀도
+            })
+            console.log(particles) //배열 확인용
+        }
+        //눈 그리기
+        function draw() {
+            ctx.clearRect(0, 0, W, H); 
+            //클리어 안해주면 쭉~ 늘어남
+
+            ctx.fillStyle = "rgba(255, 255, 255, 0.8)"; //눈 입자 색깔
+            ctx.beginPath(); //새로운 경로 만들기
+            for(let i = 0; i < mp; i++) {
+                let p = particles[i];
+                ctx.moveTo(p.x, p.y); //눈이 x,y값으로 지정 
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true); //원형으로 지정
+        }
+        //ctx.stroke(); 위에 적힌 반복문안에서 지정해준 위치에 맞게 윤곽선 눈모양으로 그려줌
+        ctx.fill(); //위에 적힌 반복문안에서 지정해준 위치에 맞게 색을 채워줌
+        update();  //위에서 아래로 눈이 내리게 함수 호출
+        }
+
+       
+        function update() {//눈내림 애니메이션 효과주는 함수
+            for(let i = 0; i < mp; i++) {
+                let p = particles[i];
+                p.y += 1+ p.r / 5 //눈 내리는 속도(배열하나하나 속도가 다름)
+                if(p.x > W+5 || p.x < -5 || p.y > H) {
+                if(i%3 > 0) { 
+                particles[i] = {x: Math.random()*W, y: -10, r: p.r};  
+                //y값만 지정해준 이유 맨 위에서 눈이 내려와야하기때문에 0~ -값으로 주면됨
+                //x값은 랜덤위치로 눈 뿌려줌
+                //r값은 눈 크기 
+                }    
+            }
+            
+        }
+        }
+        setInterval(draw, 33);
+}
+    </script>
+</body>
+</html>

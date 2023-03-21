@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas{
+            background-image: url("./img/street.png");
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="1200" height="800"></canvas>
+    <script>
+        const canvas = document.querySelector("canvas");
+        const ctx = canvas.getContext("2d");
+        const ctx2 = canvas.getContext("2d");
+
+
+        let animation;
+        let animation2;
+        let timer = 0;
+        let timer2 = 0;
+        let life = 3
+
+        let cars = [];
+        let cars2 = [];
+
+        class New_car {
+            constructor(index,x, carImg){
+                this.index = index
+                this.x = x;
+                this.y = 0;
+                this.width = 120;
+                this.height = 120;
+                this.carImg = carImg;
+            }
+            draw() {
+                let car = new Image();
+                car.src = this.carImg
+               
+                ctx.drawImage(car, this.x, this.y, this.width, this.height)
+            }
+        }
+
+
+        class New_car2 {
+            constructor(index2,x){
+                this.index2 = index2
+                this.x = x;
+                this.y = 800;
+                this.width = 50;
+                this.height = 50;
+            }
+            draw() {
+                ctx.fillStyle = "red";
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+             
+              
+            }
+        }
+
+        function startFrame() {
+            timer++;
+            //console.log(timer)
+            //캔버스 지우기
+            ctx.clearRect(0,0,canvas.width, canvas.height)
+            animation = requestAnimationFrame(startFrame)
+            
+            //180초마다 생성
+            function left(){
+                if(timer % 180 == 0) {
+                let tempX, tempY, ncar;
+                let street_num = [140, 235, 340, 440]
+                let carList = ["./img/car1.png","./img/car2.png","./img/car3.png","./img/car4.png",]
+                for(let i = 0; i< 3; i++) {
+                    //speed는 랜덤 1~ 5으로 지정 x
+                    //y값은 0으로 고정
+                    //x 값은 각 도로 위치에  4개 랜덤 배치
+                    tempX = Math.floor(Math.random() * street_num.length)
+                    tempY = Math.floor(Math.random() * carList.length)
+                   
+                    console.log(tempY)
+                    if(!sameNume(tempY)){
+                        ncar = new New_car(i,street_num[tempX], carList[tempY])
+                        cars.push(ncar)
+                    }
+                   function sameNume(tempY) {
+                        cars.find((e)=> {
+                            if(e === carList[tempY]) {
+                                cars.splice(e, 1)
+                            } 
+                        });
+                    }
+                    //return  Math.floor(Math.random() * carList.length)
+                    //console.log(cars)
+                }
+            }
+            cars.forEach((item,index,arr)=>{
+                if(item.y == 800) {
+                    arr.splice(index, 1)
+                }
+                item.y++;
+                item.draw()
+                //충돌 확인
+             
+            }) 
+           
+            }
+
+            function right(){
+                if(timer % 180 == 0) {
+                    let tempX, tempY, ncar;
+                    let street_num = [665, 765, 870, 965]
+                    let carList = ["./img/car1.png","./img/car2.png","./img/car3.png","./img/car4.png"]
+                    for(let i = 0; i< 3; i++) {
+                        //speed는 랜덤 1~ 5으로 지정 x
+                        //y값은 0으로 고정
+                        //x 값은 각 도로 위치에  4개 랜덤 배치
+                        tempX = Math.floor(Math.random() * street_num.length)
+                        tempY = Math.floor(Math.random() * carList.length)
+
+                        console.log(`${tempY}startFrame2입니다`)
+                        if(!sameNume(tempY)){
+                            ncar = new New_car2(i,street_num[tempX], carList[tempY])
+                            cars2.push(ncar)
+                        }
+                    function sameNume(tempY) {
+                            cars2.find((e)=> {
+                                if(e === carList[tempY]) {
+                                    cars2.splice(e, 1)
+                                } 
+                            });
+                        }
+                        //console.log(cars2)
+                    }
+                }
+                cars2.forEach((item,index,arr)=>{
+                    if(item.y == 0) {
+                        arr.splice(index, 1)
+                    }
+                    item.y--;
+                    item.draw()
+                    //충돌 확인
+                    
+                }) 
+                
+            }
+            left()
+            right()
+        }       
+        
+        startFrame()
+        /* function startFrame2() {
+            timer2++;
+            //console.log(timer)
+            //캔버스 지우기
+            ctx2.clearRect(0,0,canvas.width, canvas.height)
+            requestAnimationFrame(startFrame2)
+            if(timer2 % 180 == 0) {
+                let tempX2, tempSpeed2, ncar2;
+                let street_num2 = [665, 765, 870, 965]
+                for(let i = 0; i< 3; i++) {
+                    //speed는 랜덤 1~ 5으로 지정 x
+                    //y값은 0으로 고정
+                    //x 값은 각 도로 위치에  4개 랜덤 배치
+                    tempX2 = Math.floor(Math.random() * 4) 
+                    ncar2 = new New_car2(i,street_num2[tempX2])
+                    cars2.push(ncar2)
+                    //console.log(cars2)
+                }
+            }
+            cars2.forEach((item2,index2,arr2)=>{
+                if(item2.y == 0) {
+                    arr2.splice(index2, 1)
+                }
+                item2.y--;
+                item2.draw()
+                //충돌 확인
+                
+            }) 
+           
+        }
+         */
+            
+        
+        
+        
+        ////////////////////////////////////////////////////////////
+      
+        
+    </script>
+</body>
+</html>
